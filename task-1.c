@@ -1,6 +1,7 @@
 #include <unistd.h> /* Include the necessary header for 'write' */
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h> /* Include the necessary header for 'malloc' */
 
 int _putchar(char c);
 
@@ -9,10 +10,10 @@ int _printf(const char *format, ...);
 int main() {
     int num1 = 42;
     int num2 = -15;
-    
+
     _printf("Number 1: %d\n", num1);
     _printf("Number 2: %i\n", num2);
-    
+
     return 0;
 }
 
@@ -23,6 +24,8 @@ int _putchar(char c) {
 int _printf(const char *format, ...) {
     int printed_chars = 0;
     char c; /* Declare variables at the beginning */
+    char* num_buffer; /* Declare 'num_buffer' before any code execution */
+    int i; /* Declare 'i' outside of the loop for ISO C90 */
     
     va_list args;
     va_start(args, format);
@@ -30,7 +33,7 @@ int _printf(const char *format, ...) {
     while ((c = *format)) {
         if (c == '%') {
             format++; /* Move past the '%' */
-            
+
             if (*format == '\0') {
                 break; /* End of the format string */
             } else if (*format == 'd' || *format == 'i') {
@@ -55,20 +58,20 @@ int _printf(const char *format, ...) {
                         num_length++;
                     }
 
-                    char* num_buffer; /* Declare 'num_buffer' before any code execution */
                     num_buffer = (char*)malloc((num_length + 1) * sizeof(char));
                     num_buffer[num_length] = '\0';
 
-                    int i; /* Declare 'i' outside of the loop for ISO C90 */
                     for (i = num_length - 1; i >= 0; i--) {
                         num_buffer[i] = '0' + num_arg % 10;
                         num_arg /= 10;
                     }
 
-                    for (int i = 0; i < num_length; i++) {
+                    for (i = 0; i < num_length; i++) {
                         _putchar(num_buffer[i]);
                         printed_chars++;
                     }
+
+                    free(num_buffer); /* Free the dynamically allocated memory */
                 }
             } else {
                 /* Unsupported conversion specifier, just print the character */
