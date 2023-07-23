@@ -8,6 +8,7 @@ int _putchar(char c);
 int _printf(const char *format, ...)
 {
     int field_width = 0;
+    int precision = -1;
     char buffer[1024];
     int buffer_index = 0;
 
@@ -20,9 +21,7 @@ int _printf(const char *format, ...)
         {
             format++;
             
-           
-	    int precision = -1; /* Initialize precision to -1 to detect if it's set*/
-
+    
             if (*format == '*')
             {
                 field_width = va_arg(args, int);
