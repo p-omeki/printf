@@ -2,8 +2,24 @@
 #include <stdarg.h>
 #include <unistd.h> /* For the write function*/
 
-int _putchar(char c);
+/**
+ * _putchar - Writes a character to the standard output.
+ * @c: The character to write.
+ *
+ * Return: On success, returns the number of characters written.
+ * On error, returns -1.
+ */
+int _putchar(char c)
+{
+    return write(1, &c, 1);
+}
 
+/**
+ * _printf - Prints formatted output to the standard output.
+ * @format: The format string containing conversion specifiers.
+ *
+ * Return: The number of characters printed (excluding the null byte).
+ */
 int _printf(const char *format, ...)
 {
     int printed_chars = 0;
@@ -51,7 +67,7 @@ int _printf(const char *format, ...)
         format++; /* Move to the next character */
     }
 
-    /* Print any remaining characters in the buffer*/
+    /* Print any remaining characters in the buffer */
     write(1, buffer, buffer_index);
     printed_chars += buffer_index;
 
