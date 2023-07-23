@@ -3,17 +3,77 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int _putchar(char c);
+/**
+ * _putchar - Write a character to stdout
+ * @c: The character to write
+ * Return: On success, return the character written. On error, return -1
+ */
+int _putchar(char c)
+{
+    return write(1, &c, 1);
+}
 
+/**
+ * _print_integer - Print an integer based on the length modifier
+ * @args: The va_list containing the integer argument
+ * @length_modifier: The length modifier (0 for none, 1 for 'l', 2 for 'h')
+ * Return: The number of characters printed
+ */
+int _print_integer(va_list args, int length_modifier)
+{
+    if (length_modifier == 1)
+        return _putchar(va_arg(args, int));
+    else if (length_modifier == 2)
+        return _putchar((char)va_arg(args, int));
+    else
+        return _putchar(va_arg(args, int));
+}
+
+/**
+ * _print_unsigned - Print an unsigned integer based on the length modifier
+ * @args: The va_list containing the unsigned integer argument
+ * @length_modifier: The length modifier (0 for none, 1 for 'l', 2 for 'h')
+ * Return: The number of characters printed
+ */
+int _print_unsigned(va_list args, int length_modifier)
+{
+    if (length_modifier == 1)
+        return _putchar(va_arg(args, unsigned int));
+    else if (length_modifier == 2)
+        return _putchar((unsigned short)va_arg(args, unsigned int));
+    else
+        return _putchar(va_arg(args, unsigned int));
+}
+
+/**
+ * _print_hex - Print a hexadecimal integer based on the length modifier
+ * @args: The va_list containing the hexadecimal argument
+ * @length_modifier: The length modifier (0 for none, 1 for 'l', 2 for 'h')
+ * Return: The number of characters printed
+ */
+int _print_hex(va_list args, int length_modifier)
+{
+    if (length_modifier == 1)
+        return _putchar(va_arg(args, unsigned long int));
+    else if (length_modifier == 2)
+        return _putchar((unsigned short)va_arg(args, unsigned int));
+    else
+        return _putchar(va_arg(args, unsigned int));
+}
+
+/**
+ * _printf - Custom printf function
+ * @format: The format string
+ * Return: The number of characters printed
+ */
 int _printf(const char *format, ...)
 {
-    int length_modifier = 0;	
+    int length_modifier = 0;
     char buffer[1024];
     int buffer_index = 0;
 
     va_list args;
     va_start(args, format);
-
 
     while (*format)
     {
@@ -27,44 +87,37 @@ int _printf(const char *format, ...)
             if (*format == 'l') { length_modifier = 1; format++; }
             else if (*format == 'h') { length_modifier = 2; format++; }
 
-            if (*format == 'c') buffer[buffer_index++] = (char)va_arg(args, int);
+            if (*format == 'c')
+                buffer[buffer_index++] = (char)va_arg(args, int);
             else if (*format == 's')
             {
                 char *str_arg = va_arg(args, char*);
-                while (*str_arg) buffer[buffer_index++] = *str_arg++;
+                while (*str_arg)
+                    buffer[buffer_index++] = *str_arg++;
             }
             else if (*format == 'd' || *format == 'i')
             {
-                if (length_modifier == 1) va_arg(args, long int);
-                else if (length_modifier == 2) va_arg(args, int);
-                else va_arg(args, int);
-                
+                buffer_index += _print_integer(args, length_modifier);
             }
             else if (*format == 'u')
             {
-                if (length_modifier == 1) va_arg(args, unsigned long int);
-                else if (length_modifier == 2) va_arg(args, unsigned int);
-                else va_arg(args, unsigned int);
-                
+                buffer_index += _print_unsigned(args, length_modifier);
             }
             else if (*format == 'o')
             {
-                if (length_modifier == 1) va_arg(args, unsigned long int);
-                else if (length_modifier == 2) va_arg(args, unsigned int);
-                else va_arg(args, unsigned int);
-               
-	    }
+                buffer_index += _print_unsigned(args, length_modifier);
+            }
             else if (*format == 'x' || *format == 'X')
             {
-                if (length_modifier == 1) va_arg(args, unsigned long int);
-                else if (length_modifier == 2) va_arg(args, unsigned int);
-                else va_arg(args, unsigned int);
-               
+                buffer_index += _print_hex(args, length_modifier);
             }
 
             format++;
         }
-        else buffer[buffer_index++] = *format++;
+        else
+        {
+            buffer[buffer_index++] = *format++;
+        }
     }
 
     va_end(args);
@@ -74,6 +127,10 @@ int _printf(const char *format, ...)
     return buffer_index;
 }
 
+/**
+ * main - Entry point
+ * Return: Always 0
+ */
 int main(void)
 {
     _printf("Characters: %c %c\n", 'a', 65);
