@@ -1,7 +1,7 @@
 #include "main.h"
 #include <stdarg.h>
 #include <stdio.h>
-#include <unistd.h> /* For the write function*/
+#include <unistd.h> /* For the write function */
 
 int _putchar(char c);
 
