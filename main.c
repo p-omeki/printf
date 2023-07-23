@@ -38,8 +38,8 @@ int main(void) {
     printf("Length:[%d, %i]\n", len2, len2);
 
    
-    printf("Unknown:[%r]\n");
-    printf("Unknown:[%r]\n");
+/*    printf("Unknown:[%r]\n");*/
+/*    printf("Unknown:[%r]\n");*/
 
     return (0);
 }
