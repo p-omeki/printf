@@ -1,0 +1,79 @@
+#include "main.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int _putchar(char c);
+
+int _printf(const char *format, ...)
+{
+    int field_width = 0;
+    char buffer[1024];
+    int buffer_index = 0;
+
+    va_list args;
+    va_start(args, format);
+
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++;
+
+            /* Check for the '0' flag character */
+            if (*format == '0')
+            {
+                format++;
+            }
+
+            if (*format == '*')
+            {
+                field_width = va_arg(args, int);
+                format++;
+            }
+            else
+            {
+                while (*format >= '0' && *format <= '9')
+                {
+                    field_width = field_width * 10 + (*format - '0');
+                    format++;
+                }
+            }
+
+            if (*format == '.')
+            {
+                format++;
+
+                if (*format == '*')
+                {
+                    va_arg(args, int);
+                    format++;
+                }
+                else
+                {
+                    while (*format >= '0' && *format <= '9')
+                    {
+                        va_arg(args, int);
+                        format++;
+                    }
+                }
+            }
+
+            /* Rest of the code... */
+
+            format++;
+        }
+        else
+        {
+            buffer[buffer_index++] = *format;
+            format++;
+        }
+    }
+
+    va_end(args);
+
+    write(1, buffer, buffer_index);
+
+    return buffer_index;
+}
+
